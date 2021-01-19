@@ -30,8 +30,12 @@ ftoken.close()
 updater = Updater(API_KEY)
 dispatcher = updater.dispatcher
 
-# def start(update, context):
-#     context.bot.send_message(chat_id=update.effective_chat.id, text="I'm a bot, please talk to me!")
+help_message = '''
+    El bot de Zaia par quei che no ghe piaxe i neri
+'''
+
+def start(update, context):
+    context.bot.send_message(chat_id=update.effective_chat.id, text=help_message)
 
 def zaia(update, context):
     if 'zaia' in update.message.text:
@@ -40,40 +44,20 @@ def zaia(update, context):
     if 'troie' in update.message.text:
         context.bot.send_photo(chat_id=update.effective_chat.id, photo=open('./pr.jpg', 'rb'))
 
-# def caps(update, context):
-#     text_caps = ' '.join(context.args).upper()
-#     context.bot.send_message(chat_id=update.effective_chat.id, text=text_caps)
-
-# def inline_caps(update, context):
-#     query = update.inline_query.query
-#     if not query:
-#         return
-#     results = list()
-#     results.append(
-#         InlineQueryResultArticle(
-#             id=query.upper(),
-#             title='Caps',
-#             input_message_content=InputTextMessageContent(query.upper())
-#         )
-#     )
-#     context.bot.answer_inline_query(update.inline_query.id, results)
-
+def about(update, context):
+    context.bot.send_message(chat_id=update.effective_chat.id, text=help_message)
 
 def unknown(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Sorry, I didn't understand that command.")
 
 
-# start_handler = CommandHandler('start', start)
-# caps_handler = CommandHandler('caps', caps)
-# echo_handler = MessageHandler(Filters.text & (~Filters.command), echo)
-# inline_caps_handler = InlineQueryHandler(inline_caps)
+start_handler = CommandHandler('start', start)
+about_handler = CommandHandler('About', about)
 zaia_handler = MessageHandler(Filters.text, zaia)
 unknown_handler = MessageHandler(Filters.command, unknown)
 
-# dispatcher.add_handler(start_handler)
-# dispatcher.add_handler(caps_handler)
-# dispatcher.add_handler(echo_handler)
-# dispatcher.add_handler(inline_caps_handler)
+dispatcher.add_handler(start_handler)
+dispatcher.add_handler(about_handler)
 dispatcher.add_handler(zaia_handler)
 dispatcher.add_handler(unknown_handler)
 
