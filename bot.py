@@ -37,6 +37,8 @@ def zaia(update, context):
     if 'zaia' in update.message.text:
         quote=random.choice(quotes)
         context.bot.send_message(chat_id=update.effective_chat.id, text=quote)
+    if 'troie' in update.message.text:
+        context.bot.send_photo(chat_id=update.effective_chat.id, photo=open('./pr.jpg', 'rb'))
 
 # def caps(update, context):
 #     text_caps = ' '.join(context.args).upper()
