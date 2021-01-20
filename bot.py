@@ -1,11 +1,7 @@
 import os
 import random
-from telegram import InlineQueryResultArticle, InputTextMessageContent
-from telegram.ext import Updater,\
-                         CommandHandler,\
-                         MessageHandler,\
-                         Filters,\
-                         InlineQueryHandler
+# from telegram import InlineQueryResultArticle, InputTextMessageContent
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 # Dev modules
 from decouple import config
@@ -14,6 +10,7 @@ from decouple import config
 import logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                      level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Hardcoded quotes just to try it our
 quotes = [
@@ -25,14 +22,6 @@ quotes = [
     "Utilizzate questo palcoscenico per parlare anche di temi che magari sono più ostici come il tema dell'omofobia, e lo dico da eterosessuale convinto: mi auguro che qui si possa chiarire una volta per tutte che l'omofobia è una patologia",
     "Volere bene al Paese non significa solo cantare bene l'Inno di Mameli e sventolare il Tricolore"
 ]
-
-app_url = os.environ.get('APP_URL')
-env = os.environ.get('ENV', 'develop')
-TOKEN = os.environ.get('API_KEY', config('API_KEY'))
-PORT = int(os.environ.get('PORT', '8443'))
-
-updater = Updater(TOKEN)
-dispatcher = updater.dispatcher
 
 help_message = '''
     El bot uficiałe de quei che ghe piaxe el Doxe del Veneto
@@ -54,23 +43,30 @@ def about(update, context):
 def unknown(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="No go mia capio")
 
+def error(bot, update, error):
+    logger.warning('Update "%s" caused error "%s"', update, error)
 
-start_handler = CommandHandler('Start', start)
-about_handler = CommandHandler('About', about)
-zaia_handler = MessageHandler(Filters.text, zaia)
-unknown_handler = MessageHandler(Filters.command, unknown)
+if __name__ == "__main__":
+    env = os.environ.get('ENV', 'develop')
+    NAME = os.environ.get('APP_URL', "antenna-trelegram")
+    TOKEN = os.environ.get('API_KEY', config('API_KEY'))
+    PORT = int(os.environ.get('PORT', '8443'))
 
-dispatcher.add_handler(start_handler)
-dispatcher.add_handler(about_handler)
-dispatcher.add_handler(zaia_handler)
-dispatcher.add_handler(unknown_handler)
+    updater = Updater(TOKEN)
+    dispatcher = updater.dispatcher
 
-if env == 'production':
-    updater.start_webhook(listen="0.0.0.0",
-                        port=PORT,
-                        url_path=TOKEN)
-    updater.bot.set_webhook(app_url + TOKEN)
-elif env == 'develop':
-    updater.start_polling()
+    dispatcher.add_handler(CommandHandler('Start', start))
+    dispatcher.add_handler(CommandHandler('About', about))
+    dispatcher.add_handler(MessageHandler(Filters.text, zaia))
+    dispatcher.add_handler(MessageHandler(Filters.command, unknown))
+    dispatcher.add_error_handler(error)
 
-updater.idle()
+    if env == 'production':
+        updater.start_webhook(listen="0.0.0.0",
+                            port=PORT,
+                            url_path=TOKEN)
+        updater.bot.setWebhook("https://{}.herokuapp.com/{}".format(NAME, TOKEN))
+    elif env == 'develop':
+        updater.start_polling()
+
+    updater.idle()
