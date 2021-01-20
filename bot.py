@@ -65,7 +65,7 @@ if __name__ == "__main__":
         updater.start_webhook(listen="0.0.0.0",
                             port=PORT,
                             url_path=TOKEN)
-        updater.bot.setWebhook("https://{}.herokuapp.com/{}".format(NAME, TOKEN))
+        updater.bot.set_webhook("https://{}.herokuapp.com/{}".format(NAME, TOKEN))
     elif env == 'develop':
         updater.start_polling()
 
