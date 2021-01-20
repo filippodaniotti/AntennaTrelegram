@@ -7,6 +7,9 @@ from telegram.ext import Updater,\
                          Filters,\
                          InlineQueryHandler
 
+# Dev modules
+from decouple import config
+
 # Logging module
 import logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -23,15 +26,16 @@ quotes = [
     "Volere bene al Paese non significa solo cantare bene l'Inno di Mameli e sventolare il Tricolore"
 ]
 
-ftoken = open("./token.txt", "r")
-API_KEY = ftoken.read()
-ftoken.close()
+app_url = os.environ.get('APP_URL')
+env = os.environ.get('ENV', 'develop')
+TOKEN = os.environ.get('API_KEY', config('API_KEY'))
+PORT = int(os.environ.get('PORT', '8443'))
 
-updater = Updater(API_KEY)
+updater = Updater(TOKEN)
 dispatcher = updater.dispatcher
 
 help_message = '''
-    El bot de Zaia par quei che no ghe piaxe i neri
+    El bot uficiałe de quei che ghe piaxe el Doxe del Veneto
 '''
 
 def start(update, context):
@@ -41,17 +45,17 @@ def zaia(update, context):
     if 'zaia' in update.message.text:
         quote=random.choice(quotes)
         context.bot.send_message(chat_id=update.effective_chat.id, text=quote)
-    if 'troie' in update.message.text:
-        context.bot.send_photo(chat_id=update.effective_chat.id, photo=open('./pr.jpg', 'rb'))
+    # if 'troie' in update.message.text:
+    #     context.bot.send_photo(chat_id=update.effective_chat.id, photo=open('./pr.jpg', 'rb'))
 
 def about(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text=help_message)
 
 def unknown(update, context):
-    context.bot.send_message(chat_id=update.effective_chat.id, text="Sorry, I didn't understand that command.")
+    context.bot.send_message(chat_id=update.effective_chat.id, text="No go mia capio")
 
 
-start_handler = CommandHandler('start', start)
+start_handler = CommandHandler('Start', start)
 about_handler = CommandHandler('About', about)
 zaia_handler = MessageHandler(Filters.text, zaia)
 unknown_handler = MessageHandler(Filters.command, unknown)
@@ -61,5 +65,12 @@ dispatcher.add_handler(about_handler)
 dispatcher.add_handler(zaia_handler)
 dispatcher.add_handler(unknown_handler)
 
-updater.start_polling()
+if env == 'production':
+    updater.start_webhook(listen="0.0.0.0",
+                        port=PORT,
+                        url_path=TOKEN)
+    updater.bot.set_webhook(app_url + TOKEN)
+elif env == 'develop':
+    updater.start_polling()
+
 updater.idle()
