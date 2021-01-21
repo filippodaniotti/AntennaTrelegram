@@ -1,7 +1,8 @@
 import io
 import random
-from datetime import date
 import logging
+from src.graphics import process_image
+from datetime import date
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                      level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -40,6 +41,10 @@ def wait_comm(update, context):
     days = (date.today() - ref_date).days
     text = f"Ennesimo rinvio par la autonomia, è una presa in giro: la misura è colma. Semo {str(days)} giorni in atesa del governo, can del porco!"
     context.bot.send_message(chat_id=update.effective_chat.id, text=text)
+
+def img(update, context):
+    process_image("./assets/zaia.jpg")
+    context.bot.send_photo(chat_id=update.effective_chat.id, photo=open('./assets/zaia.jpg', 'rb'))
 
 def about(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text=help_message)
