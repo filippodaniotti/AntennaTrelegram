@@ -1,2 +1,6 @@
+# python specific
+__pycache__/
+
+# environment and virtualenv
 .env
 .venv/
