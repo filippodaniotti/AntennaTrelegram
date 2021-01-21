@@ -1,4 +1,3 @@
-from typing import OrderedDict
 import cv2
 import numpy as np
 
@@ -26,7 +25,6 @@ def shrink(img) -> np.ndarray:
     return cv2.resize(img, RESOLUTION_SIZE, interpolation = cv2.INTER_AREA)
 
 def apply_overlay(img, overlay) -> np.ndarray:
-    # overlay=shrink(overlay)
     shape = img.shape
     for y in range(shape[0]):
         for x in range(shape[1]):
@@ -36,11 +34,11 @@ def apply_overlay(img, overlay) -> np.ndarray:
     return img
 
 def process_image(path_to_img):
-    img = cv2.imread(path_to_img, cv2.IMREAD_UNCHANGED) 
+    img = cv2.imread(path_to_img) 
     overlay = cv2.imread("./assets/overlay.png", cv2.IMREAD_UNCHANGED)
     if round(get_ar(img), 1) != round(ASPECT_RATIO, 1):
         img = crop(img)
     if img.shape[1 : 2] != RESOLUTION_SIZE:
         img = shrink(img)        
     img = apply_overlay(img, overlay)
-    cv2.imwrite('./assets/zaia.jpg', img)
+    cv2.imwrite(path_to_img, img)
