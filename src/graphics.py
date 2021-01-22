@@ -4,7 +4,7 @@ import numpy as np
 RESOLUTION_SIZE = (960, 540)
 ASPECT_RATIO = float(16/9)
 
-DIGIT_OFFSET_W = (334, 363)
+DIGIT_OFFSET_W = (333, 362)
 DIGIT_OFFSET_H = (456, 500)
 
 def get_ar(img) -> float:
@@ -37,15 +37,21 @@ def apply_overlay(img, overlay) -> np.ndarray:
     return img
 
 def set_days(img, days) -> np.ndarray:
+    # dw is the width of each single digit
     dw = DIGIT_OFFSET_W[1] - DIGIT_OFFSET_W[0]
     current_digit = cv2.imread(f'./assets/{days[0]}.png', cv2.IMREAD_UNCHANGED)
+    # loop through each digit
     for digit in range(len(days)):
         if digit > 0 and days[digit] != days[digit - 1]:
             current_digit = cv2.imread(f'./assets/{days[digit]}.png', cv2.IMREAD_UNCHANGED)
+        # traverse the submatrix that will hold the digit
         for y in range(DIGIT_OFFSET_H[0], DIGIT_OFFSET_H[1]):
+            # compute effective width boundaries according to digit position,
+            # with 1 extra pixel as offset
             start_x = (DIGIT_OFFSET_W[0] + digit*dw) + 1
             end_x = (DIGIT_OFFSET_W[1] + digit*dw) + 1
-            for x in range(start_x,end_x):
+            for x in range(start_x, end_x):
+                # if current pixel is not transparent then substitute the color vector
                 if current_digit[y - DIGIT_OFFSET_H[0]][x - start_x][3] > 0:
                     for color in range(3):
                         img[y][x][color] = current_digit[y - DIGIT_OFFSET_H[0]][x - start_x][color]
