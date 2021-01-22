@@ -19,8 +19,7 @@ if __name__ == "__main__":
 
     dispatcher.add_handler(CommandHandler('start', start))
     dispatcher.add_handler(CommandHandler('info', about))
-    dispatcher.add_handler(CommandHandler('i', img))
-    # dispatcher.add_handler(CommandHandler('attesa', wait_comm))
+    dispatcher.add_handler(CommandHandler('giorni', img))
     dispatcher.add_handler(MessageHandler(Filters.text, msg_handler))
     dispatcher.add_handler(MessageHandler(Filters.command, unknown))
     dispatcher.add_error_handler(error)

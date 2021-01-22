@@ -1,8 +1,11 @@
 import io
+import os
 import random
 import logging
+import requests
 from src.graphics import process_image
 from datetime import date
+from decouple import config
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                      level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -43,8 +46,10 @@ def wait_comm(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text=text)
 
 def img(update, context):
-    process_image("./assets/zaia.jpg")
-    context.bot.send_photo(chat_id=update.effective_chat.id, photo=open('./assets/zaia.jpg', 'rb'))
+    days = (date.today() - ref_date).days
+    process_image("./assets/zaia16.jpg", str(days))
+    context.bot.send_photo(chat_id=update.effective_chat.id, photo=open('./assets/zaia16.jpg', 'rb'))
+    os.unlink('./assets/zaia16.jpg')
 
 def about(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text=help_message)

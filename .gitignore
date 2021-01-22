@@ -1,5 +1,6 @@
 # python specific
 __pycache__/
+.pylintrc
 
 # environment and virtualenv
 env/
