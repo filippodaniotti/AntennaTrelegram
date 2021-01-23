@@ -1,5 +1,6 @@
 import os
 from src.handlers import *
+from src.frontend import generate_access_token
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, JobQueue
 
 # Dev and logging modules
@@ -9,6 +10,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                      level=logging.INFO)
 
 def main():
+    generate_access_token()
     env = os.environ.get('ENV', 'develop')
     NAME = os.environ.get('APP_URL', "antenna-trelegram")
     TOKEN = os.environ.get('API_KEY', config('API_KEY'))
@@ -21,8 +23,7 @@ def main():
     # job_queue.run_daily(callback_img, time=time(21, 30, 30))
     dispatcher.add_handler(CommandHandler('start', start))
     dispatcher.add_handler(CommandHandler('info', about))
-    # dispatcher.add_handler(CommandHandler('giorni', img))
-    # dispatcher.add_handler(CommandHandler('timer', callback_timer))
+    dispatcher.add_handler(CommandHandler('imagine', callback_img))
     dispatcher.add_handler(MessageHandler(Filters.text, msg_handler))
     dispatcher.add_handler(MessageHandler(Filters.command, unknown))
     dispatcher.add_error_handler(error)
