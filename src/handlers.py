@@ -28,8 +28,9 @@ def start(update, context):
     # user_id = update.message.chat_id
     # user_name = update.message.from_user.name
     # r.set (user_name, user_id)
+    # print(update.effective_chat.id)
     context.bot.send_message(chat_id=update.effective_chat.id, text=help_message)
-    # context.job_queue.run_daily(callback_img, time=time(21, 44, 30), context=update.message.chat_id)
+    # context.job_queue.run_daily(callback_img, time=SEND_TIME, context=update.message.chat_id)
 
 def msg_handler(update, context):
     quote_trig(update, context)
@@ -52,12 +53,12 @@ def error(bot, update, error):
 # def callback_alarm(context):
 #     context.bot.send_message(chat_id=context.job.context, text='BEEP')
 
-def callback_img(update, context):
+def callback_img(context):
     img_path = get_image()
     days = (date.today() - REF_DATE).days
     process_image(img_path, str(days))
     # context.bot.send_photo(chat_id=context.job.context, photo=open(img_path, 'rb'))
-    context.bot.send_photo(chat_id=update.effective_chat.id, photo=open(img_path, 'rb'))
+    context.bot.send_photo(chat_id=os.environ.get('TO'), photo=open(img_path, 'rb'))
     os.unlink(img_path)
 
 # def callback_timer(update, context):

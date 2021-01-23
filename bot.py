@@ -9,18 +9,20 @@ from decouple import config
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                      level=logging.INFO)
 
+SEND_TIME = time(7, 30, 0) # should be 8:30 but timezones suck
+
 def main():
     generate_access_token()
     env = os.environ.get('ENV', 'develop')
-    NAME = os.environ.get('APP_URL', "antenna-trelegram")
+    NAME = os.environ.get('NAME', config('NAME'))
     TOKEN = os.environ.get('API_KEY', config('API_KEY'))
     PORT = int(os.environ.get('PORT', '8443'))
 
     updater = Updater(TOKEN)
-    # job_queue = updater.job_queue
+    job_queue = updater.job_queue
     dispatcher = updater.dispatcher
 
-    # job_queue.run_daily(callback_img, time=time(21, 30, 30))
+    job_queue.run_daily(callback_img, time=SEND_TIME)
     dispatcher.add_handler(CommandHandler('start', start))
     dispatcher.add_handler(CommandHandler('info', about))
     dispatcher.add_handler(CommandHandler('imagine', callback_img))
