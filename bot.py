@@ -22,8 +22,8 @@ def main():
 
     queue.run_daily(daily_image, time=SEND_TIME)
     dispatcher.add_handler(CommandHandler('start', start))
-    # dispatcher.add_handler('ancora', subscribe)
-    # dispatcher.add_handler('basta', unsubscribe)
+    dispatcher.add_handler(CommandHandler('segui', subscribe))
+    dispatcher.add_handler(CommandHandler('ferma', unsubscribe))
     dispatcher.add_handler(CommandHandler('text', test))
     dispatcher.add_handler(CommandHandler('info', about))
     # dispatcher.add_handler(CommandHandler('imagine', callback_img))

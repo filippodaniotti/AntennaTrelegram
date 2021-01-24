@@ -18,6 +18,10 @@ help_message = 'El bot uficiałe de quei che ghe piaxe el Doxe del Veneto'
 
 r = redis.from_url(os.environ.get("REDIS_URL"))
 
+# this is honestly terrible
+# i will implement a actual db as soon as possible
+subs = {}
+
 # Hardcoded stuff, definitely to improve
 with io.open('./assets/quotes.txt', 'r', encoding='utf8') as fquotes:
     quotes = fquotes.read().split('\n')
@@ -25,19 +29,38 @@ fquotes.close()
 
 # Functions, commands, handler definitions
 def start(update, context):
-    user_id = update.message.from_user.id
-    user_name = update.message.from_user.name
-    r.set(user_name, user_id)
+    chat_id = update.effective_chat.id
+    if update.effective_chat.type == 'private':
+        chat_name = update.effective_chat.username 
+    elif update.effective_chat.type == 'group':
+        chat_name = update.effective_chat.title 
+    else:
+        chat_name = 'error'
+    r.set(chat_name, chat_id)
+    # subs[chat_name] = chat_id
     context.bot.send_message(chat_id=update.effective_chat.id, text='Arei qua i fioiii')
     # context.job_queue.run_daily(callback_img, time=SEND_TIME)
 
 def subscribe(update, context):
-    user_id = update.message.from_user.id
-    user_name = update.message.from_user.name
-    pass
+    chat_id = update.message.from_user.id
+    if update.effective_chat.type == 'private':
+        chat_name = update.effective_chat.username 
+    elif update.effective_chat.type == 'group':
+        chat_name = update.effective_chat.title 
+    else:
+        chat_name = 'error'
+    # subs[chat_name] = chat_id
+    r.set(chat_name, chat_id)
 
-def unsubscribe(context, update):
-    pass
+def unsubscribe(update, context):
+    if update.effective_chat.type == 'private':
+        chat_name = update.effective_chat.username 
+    elif update.effective_chat.type == 'group':
+        chat_name = update.effective_chat.title 
+    else:
+        chat_name = 'error'
+    # del subs[update.message.from_user.name]
+    r.delete(chat_name)
 
 def msg_handler(update, context):
     quote_trig(update, context)
@@ -54,8 +77,10 @@ def error(bot, update, error):
 
 def test(update, context):
     db_keys = r.keys(pattern="*")
+    # db_keys = subs.keys()
     for keys in db_keys:
         keys_values = r.get(keys).decode("UTF-8")
+        # keys_values = subs[keys]
         print(keys_values)
         context.bot.send_message(chat_id=keys_values, text='pls funzia')
 
@@ -71,8 +96,10 @@ def daily_image(context):
     days = (date.today() - REF_DATE).days
     process_image(img_path, str(days))
     db_keys = r.keys(pattern="*")
+    # db_keys = subs.keys()s
     for keys in db_keys:
         keys_values = r.get(keys).decode("UTF-8")
+        # keys_values = subs[keys]
         print(keys_values)
         context.bot.send_photo(chat_id=keys_values, photo=open(img_path, 'rb'))
     # context.bot.send_photo(chat_id=context.job.context, photo=open(img_path, 'rb'))
