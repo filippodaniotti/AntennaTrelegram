@@ -16,7 +16,7 @@ REF_DATE = date(2017, 10, 22)
 SEND_TIME = time(7, 30, 0) # should be 8:30 but timezones suck
 help_message = 'El bot uficiałe de quei che ghe piaxe el Doxe del Veneto'
 
-r = redis.from_url(os.get.envrion("REDIS_URL"))
+r = redis.from_url(os.environ.get("REDIS_URL"))
 db_keys = r.keys(pattern="*")
 
 # Hardcoded stuff, definitely to improve
@@ -29,7 +29,7 @@ def start(update, context):
     user_id = update.message.chat_id
     user_name = update.message.from_user.name
     r.set(user_name, user_id)
-    context.bot.send_message(chat_id=update.effective_chat.id, text=help_message)
+    context.bot.send_message(chat_id=update.effective_chat.id, text='Arei qua i fioiii')
     # context.job_queue.run_daily(callback_img, time=SEND_TIME)
 
 def subscribe(update, context):
@@ -79,7 +79,7 @@ def quote_trig(update, context):
         context.bot.send_message(chat_id=update.effective_chat.id, text=quote)
 
 def wait_trig(update, context):
-    triggers = ['autonomi', 'venet', 'referendum']
+    triggers = ['autonomi', 'venet', 'referendum', 'vot']
     for trigger in triggers:
         if trigger in update.message.text:
             days = (date.today() - REF_DATE).days
