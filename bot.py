@@ -24,6 +24,7 @@ def main():
     dispatcher.add_handler(CommandHandler('start', start))
     # dispatcher.add_handler('ancora', subscribe)
     # dispatcher.add_handler('basta', unsubscribe)
+    dispatcher.add_handler(CommandHandler('text', test))
     dispatcher.add_handler(CommandHandler('info', about))
     # dispatcher.add_handler(CommandHandler('imagine', callback_img))
     dispatcher.add_handler(MessageHandler(Filters.text, msg_handler))

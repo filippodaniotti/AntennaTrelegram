@@ -53,6 +53,12 @@ def unknown(update, context):
 def error(bot, update, error):
     logger.warning('Update "%s" caused error "%s"', update, error)
 
+def test(context, update):
+    for keys in db_keys:
+        keys_values = r.get(keys).decode("UTF-8")
+        print(keys_values)
+        context.bot.send_message(chat_id=keys_values, text='pls funzia')
+
 # def wait(update, context):
 #     days = (date.today() - ref_date).days
 #     text = f"Ennesimo rinvio par la autonomia, è una presa in giro: la misura è colma. Semo {str(days)} giorni in atesa del governo, can del porco!"
