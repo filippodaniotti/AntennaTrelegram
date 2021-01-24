@@ -17,7 +17,6 @@ SEND_TIME = time(7, 30, 0) # should be 8:30 but timezones suck
 help_message = 'El bot uficiałe de quei che ghe piaxe el Doxe del Veneto'
 
 r = redis.from_url(os.environ.get("REDIS_URL"))
-db_keys = r.keys(pattern="*")
 
 # Hardcoded stuff, definitely to improve
 with io.open('./assets/quotes.txt', 'r', encoding='utf8') as fquotes:
@@ -26,14 +25,14 @@ fquotes.close()
 
 # Functions, commands, handler definitions
 def start(update, context):
-    user_id = update.message.chat_id
+    user_id = update.message.from_user.id
     user_name = update.message.from_user.name
     r.set(user_name, user_id)
     context.bot.send_message(chat_id=update.effective_chat.id, text='Arei qua i fioiii')
     # context.job_queue.run_daily(callback_img, time=SEND_TIME)
 
 def subscribe(update, context):
-    user_id = update.message.chat_id
+    user_id = update.message.from_user.id
     user_name = update.message.from_user.name
     pass
 
@@ -53,7 +52,8 @@ def unknown(update, context):
 def error(bot, update, error):
     logger.warning('Update "%s" caused error "%s"', update, error)
 
-def test(context, update):
+def test(update, context):
+    db_keys = r.keys(pattern="*")
     for keys in db_keys:
         keys_values = r.get(keys).decode("UTF-8")
         print(keys_values)
@@ -70,6 +70,7 @@ def daily_image(context):
     img_path = get_image()
     days = (date.today() - REF_DATE).days
     process_image(img_path, str(days))
+    db_keys = r.keys(pattern="*")
     for keys in db_keys:
         keys_values = r.get(keys).decode("UTF-8")
         print(keys_values)
