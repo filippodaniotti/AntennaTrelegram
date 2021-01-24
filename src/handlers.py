@@ -68,10 +68,10 @@ def msg_handler(update, context):
     wait_trig(update, context)
 
 def about(update, context):
-    context.bot.send_message(chat_id=update.effective_chat.id, text='El bot uficiałe de quei che ghe piaxe el Doxe del Veneto')
+    context.bot.send_message(chat_id=update.effective_chat.id, text='El bot uficiałe de quei che ghe piaxe el Doxe del Veneto.')
 
 def unknown(update, context):
-    context.bot.send_message(chat_id=update.effective_chat.id, text="No go mia capio")
+    context.bot.send_message(chat_id=update.effective_chat.id, text="No go mia capio.")
 
 def error(bot, update, error):
     logger.warning('Update "%s" caused error "%s"', update, error)

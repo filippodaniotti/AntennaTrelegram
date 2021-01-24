@@ -46,7 +46,7 @@ def set_days(img, days) -> np.ndarray:
             current_digit = cv2.imread(f'./assets/{days[digit]}.png', cv2.IMREAD_UNCHANGED)
         # traverse the submatrix that will hold the digit
         for y in range(DIGIT_OFFSET_H[0], DIGIT_OFFSET_H[1]):
-            # compute effective width boundaries according to digit position,
+            # compute actual width boundaries according to digit position,
             # with 1 extra pixel as offset
             start_x = (DIGIT_OFFSET_W[0] + digit*dw) + 1
             end_x = (DIGIT_OFFSET_W[1] + digit*dw) + 1
