@@ -14,13 +14,8 @@ logger = logging.getLogger(__name__)
 
 REF_DATE = date(2017, 10, 22)
 SEND_TIME = time(7, 30, 0) # should be 8:30 but timezones suck
-help_message = 'El bot uficiałe de quei che ghe piaxe el Doxe del Veneto'
 
 r = redis.from_url(os.environ.get("REDIS_URL"))
-
-# this is honestly terrible
-# i will implement a actual db as soon as possible
-subs = {}
 
 # Hardcoded stuff, definitely to improve
 with io.open('./assets/quotes.txt', 'r', encoding='utf8') as fquotes:
@@ -37,20 +32,23 @@ def start(update, context):
     else:
         chat_name = 'error'
     r.set(chat_name, chat_id)
-    # subs[chat_name] = chat_id
-    context.bot.send_message(chat_id=update.effective_chat.id, text='Arei qua i fioiii')
-    # context.job_queue.run_daily(callback_img, time=SEND_TIME)
+    context.bot.send_message(chat_id=update.effective_chat.id, text='Arei qua i fioi')
 
 def subscribe(update, context):
-    chat_id = update.message.from_user.id
+    chat_id = update.effective_chat.id
     if update.effective_chat.type == 'private':
         chat_name = update.effective_chat.username 
     elif update.effective_chat.type == 'group':
         chat_name = update.effective_chat.title 
     else:
         chat_name = 'error'
-    # subs[chat_name] = chat_id
-    r.set(chat_name, chat_id)
+    if r.exists(chat_name):
+        context.bot.send_message(chat_id=update.effective_chat.id, text='Tranquio vecio, te sì zà a posto.')
+    else:
+        r.set(chat_name, chat_id)
+        context.bot.send_message(chat_id=update.effective_chat.id, text='Bravo tosat, apuntamento ałe 8:30.')
+
+
 
 def unsubscribe(update, context):
     if update.effective_chat.type == 'private':
@@ -59,15 +57,18 @@ def unsubscribe(update, context):
         chat_name = update.effective_chat.title 
     else:
         chat_name = 'error'
-    # del subs[update.message.from_user.name]
-    r.delete(chat_name)
+    if r.exists(chat_name):
+        r.delete(chat_name)
+        context.bot.send_message(chat_id=update.effective_chat.id, text='No va mio ben sta roba, satu? Te convien strucar /segui.')
+    else:
+        context.bot.send_message(chat_id=update.effective_chat.id, text='Varda che te te iera zà cavà via, davero votu eser cussì sicuro de no vedar ła foto?')
 
 def msg_handler(update, context):
     quote_trig(update, context)
     wait_trig(update, context)
 
 def about(update, context):
-    context.bot.send_message(chat_id=update.effective_chat.id, text=help_message)
+    context.bot.send_message(chat_id=update.effective_chat.id, text='El bot uficiałe de quei che ghe piaxe el Doxe del Veneto')
 
 def unknown(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="No go mia capio")
@@ -75,35 +76,15 @@ def unknown(update, context):
 def error(bot, update, error):
     logger.warning('Update "%s" caused error "%s"', update, error)
 
-def test(update, context):
-    db_keys = r.keys(pattern="*")
-    # db_keys = subs.keys()
-    for keys in db_keys:
-        keys_values = r.get(keys).decode("UTF-8")
-        # keys_values = subs[keys]
-        print(keys_values)
-        context.bot.send_message(chat_id=keys_values, text='pls funzia')
-
-# def wait(update, context):
-#     days = (date.today() - ref_date).days
-#     text = f"Ennesimo rinvio par la autonomia, è una presa in giro: la misura è colma. Semo {str(days)} giorni in atesa del governo, can del porco!"
-#     context.bot.send_message(chat_id=update.effective_chat.id, text=text)
-
-
 # Jobs definition
 def daily_image(context):
     img_path = get_image()
     days = (date.today() - REF_DATE).days
     process_image(img_path, str(days))
     db_keys = r.keys(pattern="*")
-    # db_keys = subs.keys()s
     for keys in db_keys:
         keys_values = r.get(keys).decode("UTF-8")
-        # keys_values = subs[keys]
-        print(keys_values)
         context.bot.send_photo(chat_id=keys_values, photo=open(img_path, 'rb'))
-    # context.bot.send_photo(chat_id=context.job.context, photo=open(img_path, 'rb'))
-    # context.bot.send_photo(chat_id=, photo=open(img_path, 'rb'))
     os.unlink(img_path)
 
 # Message Handlers definition

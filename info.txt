@@ -1,0 +1,8 @@
+--- description ---
+Appuntamento quotidiano alle 8:30 per ricevere una foto del giorno del Doge del Veneto, completa di contatore dei giorni che sono intercorsi da quel lontano 22 ottobre 2017, giorno in cui il popolo dei Veneti ha espresso la volontà di sciogliere i legami con il governo centrale e liberarsi del giogo dell'oppressore italiano.
+
+--- commands ---
+
+segui - Ricevi la foto del giorno sul Doge e il referendum
+ferma - Smetti di ricevere la foto del giorno
+info - Informazioni su Antenna Trelegram
