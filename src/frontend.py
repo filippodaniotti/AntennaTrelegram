@@ -8,7 +8,7 @@ from requests.api import get
 
 ACCESS_TOKEN = ''
 ALBUM_HASH = os.environ.get('ALBUM_HASH', config('ALBUM_HASH'))
-IMG_PATH = './assets/zaia.jpg'
+IMG_PATH = './assets/pic.jpg'
 
 def get_image() -> str:
 	url = f"https://api.imgur.com/3/album/{ALBUM_HASH}/images"
