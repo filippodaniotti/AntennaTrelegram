@@ -84,6 +84,7 @@ def daily_image(context):
     db_keys = r.keys(pattern="*")
     for keys in db_keys:
         keys_values = r.get(keys).decode("UTF-8")
+        print(f'Sending to {keys}: {keys_values}')
         context.bot.send_photo(chat_id=keys_values, photo=open(img_path, 'rb'))
     os.unlink(img_path)
 
