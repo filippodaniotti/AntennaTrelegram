@@ -30,14 +30,15 @@ def main():
     dispatcher.add_error_handler(error)
     
 
-    if ENV == 'production':
-        updater.start_webhook(listen="0.0.0.0",
-                            port=PORT,
-                            url_path=TOKEN)
-        updater.bot.set_webhook("https://{}.herokuapp.com/{}".format(NAME, TOKEN))
-    elif ENV == 'develop':
-        updater.start_polling()
+    # if ENV == 'production':
+    #     updater.start_webhook(listen="0.0.0.0",
+    #                         port=PORT,
+    #                         url_path=TOKEN)
+    #     updater.bot.set_webhook("https://{}.herokuapp.com/{}".format(NAME, TOKEN))
+    # elif ENV == 'develop':
+    #     updater.start_polling()
 
+    updater.start_polling()
     updater.idle()
 
 if __name__ == "__main__":

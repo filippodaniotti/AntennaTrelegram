@@ -9,14 +9,14 @@ If you want to test it locally you have to make sure you have an account on [Img
 
 You will also need [Python](https://www.python.org/) installed (of course); then, follow these steps:
 * get the API key for your bot from the [BotFather](https://t.me/BotFather)
-* create a local environments with all the required variables (check the [sample provided](./.env.sample))
+* setup a local environment with all the required variables (check the [sample provided](./.env.sample))
 * create the Python Virtualenv with `py -m venv env` or any name you like
 * install the dependencies with `pip install -r requirements.txt` (if it doesn't work try with `pip3 install -r requirements.txt`)
 * run with `python bot.py`
 
 
 ## Disclaimer
-> This bot does make use of irony and was developed primarely for lighthearted humor of a private chat. No personal injury was inteded or even taken into account.
+> This bot does make use of irony and was developed primarely for lighthearted humor in a private chat. No personal injury was inteded or even taken into account during development.
 
 ## Tech Stack
 * [Python Telegram Bot](https://python-telegram-bot.org/) as wrapper for the Telegram API
