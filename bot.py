@@ -25,7 +25,7 @@ def main():
     dispatcher.add_handler(CommandHandler('segui', subscribe))
     dispatcher.add_handler(CommandHandler('ferma', unsubscribe))
     dispatcher.add_handler(CommandHandler('info', about))
-    dispatcher.add_handler(MessageHandler(Filters.text, msg_handler))
+    dispatcher.add_handler(MessageHandler(Filters.update.message & (~Filters.update.edited_message), msg_handler))
     dispatcher.add_handler(MessageHandler(Filters.command, unknown))
     dispatcher.add_error_handler(error)
     
