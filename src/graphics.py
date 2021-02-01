@@ -58,12 +58,21 @@ def set_days(img, days) -> np.ndarray:
     return img
 
 def process_image(path_to_img, days):
+    print("Processing image...")
+    print("Opening")
     img = cv2.imread(path_to_img) 
+    print(img.shape)
+    print("Opening overlay")
     overlay = cv2.imread("./assets/overlay.png", cv2.IMREAD_UNCHANGED)
     if round(get_ar(img), 1) != round(ASPECT_RATIO, 1):
+        print("Cropping")
         img = crop(img)
     if img.shape[1 : 2] != RESOLUTION_SIZE:
+        print("Shrinking")
         img = shrink(img)        
+    print("Applying overlay")
     img = apply_overlay(img, overlay)
+    print("Applying days")
     img = set_days(img, days)
+    print("Done")
     cv2.imwrite(path_to_img, img)

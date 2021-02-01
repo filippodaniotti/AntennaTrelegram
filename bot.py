@@ -11,10 +11,10 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 def main():
     generate_access_token()
-    ENV = os.environ.get('ENV', 'develop')
-    NAME = os.environ.get('NAME', config('NAME'))
+    # ENV = os.environ.get('ENV', 'develop')
+    # NAME = os.environ.get('NAME', config('NAME'))
     TOKEN = os.environ.get('API_KEY', config('API_KEY'))
-    PORT = int(os.environ.get('PORT', '8443'))
+    # PORT = int(os.environ.get('PORT', '8443'))
 
     updater = Updater(TOKEN)
     queue = updater.job_queue
