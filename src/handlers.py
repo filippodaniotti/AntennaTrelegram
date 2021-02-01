@@ -13,7 +13,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 REF_DATE = date(2017, 10, 22)
-SEND_TIME = time(10, 0, 0) # should be 8:30 but timezones suck
+SEND_TIME = time(8, 0, 0) # should be 8:30 but timezones suck
 
 r = redis.from_url(os.environ.get("REDIS_URL"))
 
