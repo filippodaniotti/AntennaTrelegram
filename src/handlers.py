@@ -90,14 +90,14 @@ def daily_image(context):
 
 # Message Handlers definition
 def quote_trig(update, context):
-    if 'zaia' in update.message.text:
+    if 'zaia' in update.message.text.lower():
         quote=random.choice(quotes)
         context.bot.send_message(chat_id=update.effective_chat.id, text=quote)
 
 def wait_trig(update, context):
     triggers = ['autonomi', 'venet', 'referendum', 'vot']
     for trigger in triggers:
-        if trigger in update.message.text:
+        if trigger in update.message.text.lower():
             days = (date.today() - REF_DATE).days
             text = f"Ennesimo rinvio par la autonomia, è una presa in giro: la misura è colma. Semo {str(days)} giorni in atesa del governo, can del porco!"
             context.bot.send_message(chat_id=update.effective_chat.id, text=text)
