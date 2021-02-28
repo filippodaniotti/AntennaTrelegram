@@ -2,13 +2,8 @@ import os
 import requests
 import random
 from decouple import config
-# from urllib.parse import urlparse
+from src.config import IMG_PATH, ALBUM_HASH, ACCESS_TOKEN
 
-from requests.api import get
-
-ACCESS_TOKEN = ''
-ALBUM_HASH = os.environ.get('ALBUM_HASH', config('ALBUM_HASH'))
-IMG_PATH = './assets/pic.jpg'
 
 def get_image() -> str:
 	print("Fetching image...")

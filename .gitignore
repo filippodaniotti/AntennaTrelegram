@@ -8,3 +8,6 @@ env/
 
 # vscode
 .vscode/
+
+# gdrive
+creds.json

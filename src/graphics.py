@@ -1,21 +1,16 @@
 import cv2
 import numpy as np
+from src.config import RESOLUTION_SIZE, ASPECT_RATIO, DIGIT_OFFSET_H, DIGIT_OFFSET_W
 
-RESOLUTION_SIZE = (960, 540)
-ASPECT_RATIO = float(16/9)
-
-DIGIT_OFFSET_W = (333, 362)
-DIGIT_OFFSET_H = (456, 500)
-
-def get_ar(img) -> float:
+def get_aspect_ratio(img) -> float:
     # Width / height
     return img.shape[1] / img.shape[0]
 
 def crop(img) -> np.ndarray:
-    if get_ar(img) < ASPECT_RATIO:
+    if get_aspect_ratio(img) < ASPECT_RATIO:
         new_h = float(img.shape[1] / ASPECT_RATIO)
         cropped_img =  img[1 : int(new_h), :]
-    elif get_ar(img) > ASPECT_RATIO:
+    elif get_aspect_ratio(img) > ASPECT_RATIO:
         new_w = float(img.shape[0] * ASPECT_RATIO)
         dw = float(img.shape[1] - new_w)
         # cropped_img = img[:, int(new_w/2):-int(new_w/2), :]
@@ -64,7 +59,7 @@ def process_image(path_to_img, days):
     print(img.shape)
     print("Opening overlay")
     overlay = cv2.imread("./assets/overlay.png", cv2.IMREAD_UNCHANGED)
-    if round(get_ar(img), 1) != round(ASPECT_RATIO, 1):
+    if round(get_aspect_ratio(img), 1) != round(ASPECT_RATIO, 1):
         print("Cropping")
         img = crop(img)
     if img.shape[1 : 2] != RESOLUTION_SIZE:
