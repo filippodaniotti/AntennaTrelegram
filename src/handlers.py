@@ -75,13 +75,13 @@ def daily_image(context):
     img_path = get_image()
     days = (date.today() - REF_DATE).days
     process_image(img_path, str(days))
+    caption = compose_caption()
     db_keys = r.keys(pattern="*")
     for keys in db_keys:
         keys_values = r.get(keys).decode("UTF-8")
         print(f'Sending to {keys}: {keys_values}')
-        caption = compose_caption()
         try:
-            context.bot.send_photo(chat_id=keys_values, photo=open(img_path, 'rb', caption=caption))
+            context.bot.send_photo(chat_id=keys_values, photo=open(img_path, 'rb'), caption=caption)
         except Exception as ex:
             print(ex)
     os.unlink(img_path)
