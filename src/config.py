@@ -28,7 +28,7 @@ ACCESS_TOKEN = ''
 ALBUM_HASH = os.environ.get('ALBUM_HASH', config('ALBUM_HASH'))
 
 ## Heroku redis db
-# r = redis.from_url(os.environ.get("REDIS_URL"))
+r = redis.from_url(os.environ.get("REDIS_URL"))
 
 ## Gdrive API credentials path
 SHEET_ID = os.environ.get('SHEET_ID', config('SHEET_ID'))
