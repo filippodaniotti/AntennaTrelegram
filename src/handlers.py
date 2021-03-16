@@ -14,7 +14,8 @@ logger = logging.getLogger(__name__)
 ## DECORATORS
 def triggerslist(trig):
     def inner(*args, **kwargs):
-        if r.exists(update.effective_chat.id):
+        chat_name = get_chat_info(args[0])[1]
+        if r.exists(chat_name):
             trig(*args, **kwargs)
 
     return inner
@@ -28,12 +29,12 @@ def triggerslist(trig):
 
 # Utilities
 def get_chat_info(update):
-    chat_id = update.effective_chat.id
-    chat_type = update.effective_chat.type
-    if update.effective_chat.type == 'private':
-        chat_name = update.effective_chat.username 
+    chat_id = update.message.chat.id
+    chat_type = update.message.chat.type
+    if chat_type == 'private':
+        chat_name = update.message.chat.username 
     elif chat_type == 'group' or chat_type == 'supergroup':
-        chat_name = update.effective_chat.title 
+        chat_name = update.message.chat.title 
     else:
         chat_name = 'error'
     return chat_id, chat_name
