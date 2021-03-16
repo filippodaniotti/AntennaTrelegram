@@ -11,10 +11,20 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                      level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Hardcoded stuff, definitely to improve
-# with io.open('./assets/quotes.txt', 'r', encoding='utf8') as fquotes:
-#     quotes = fquotes.read().split('\n')
-# fquotes.close()
+## DECORATORS
+def triggerslist(trig):
+    def inner(*args, **kwargs):
+        if r.exists(update.effective_chat.id):
+            trig(*args, **kwargs)
+
+    return inner
+
+# def subscription(action):
+#     def inner(*args, **kwargs):
+#         chat_id, chat_name = get_chat_info(update)
+
+#     return inner
+
 
 # Utilities
 def get_chat_info(update):
@@ -105,6 +115,7 @@ def compose_caption():
     return caption
 
 # Message Handlers definition
+@triggerslist
 def quote_trig(update, context):
     if 'zaia' in update.message.text.lower():
         polling = retrieve_sheet(Polling)
@@ -114,7 +125,7 @@ def quote_trig(update, context):
         context.bot.send_message(chat_id=update.effective_chat.id, text=quote)
 
         
-
+@triggerslist
 def wait_trig(update, context):
     triggers = ['autonomi', 'venet', 'referendum', 'vot']
     for trigger in triggers:

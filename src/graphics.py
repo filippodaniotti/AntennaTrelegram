@@ -56,7 +56,6 @@ def process_image(path_to_img, days):
     print("Processing image...")
     print("Opening")
     img = cv2.imread(path_to_img) 
-    print(img.shape)
     print("Opening overlay")
     overlay = cv2.imread("./assets/overlay.png", cv2.IMREAD_UNCHANGED)
     if round(get_aspect_ratio(img), 1) != round(ASPECT_RATIO, 1):
